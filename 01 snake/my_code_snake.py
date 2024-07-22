@@ -57,7 +57,7 @@ def main(stdscr):
 
         snake.insert(0, (y, x))
 
-        win.addstr(0,10, "snake : "+ str(snake[0]))
+        win.addstr(0,10, "key : "+ str(snake[0]))
 
         # win.addch(snake[0][0], snake[0][1], SNAKE_CHAR)
 
