@@ -119,6 +119,8 @@ while True:  # Main program loop.
         showGoatDoor = random.randint(1, 3)
         if showGoatDoor != doorPick and showGoatDoor != doorThatHasCar:
             break
+    # while 반복해서 showgoatdoor 에 doorpick X, doorthathascar X 값 넣기
+    # 애초에 goat 정해놓은게 아니라, 사용자가 숫자 정하면 그거 피해서 goat 설정.
 
     # Show this goat door to the player:
     if showGoatDoor == 1:
@@ -138,6 +140,8 @@ while True:  # Main program loop.
             break
 
     # Swap the player's door if they wanted to swap:
+    # case 구문 쓸 수 없나?
+
     if swap == 'Y':
         if doorPick == 1 and showGoatDoor == 2:
             doorPick = 3
@@ -198,3 +202,9 @@ while True:  # Main program loop.
     print('success rate {}%'.format(staySuccess))
     print()
     input('Press Enter repeat the experiment...')
+
+    # v1. 이 소스 구현
+    # v2 automode 로 프로그램 수백번 진행하고 값 return 버전 따로 만들기
+    #   argparse 써보기?
+    # input 을 rand.int 입력하는 것을 출력할 수 있는가? ⇒ 이거 안해도 될듯
+    
