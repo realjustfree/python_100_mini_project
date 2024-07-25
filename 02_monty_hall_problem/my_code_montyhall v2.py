@@ -106,9 +106,9 @@ def doors_init(user_choice):
                         doors[index] = "c"
     # car_position = "".join(str(doors)).find("c")
     car_position = doors.index("c")
-
+    print("==============================================")
     print("doors: ", doors)
-    print("car_position :", car_position)
+    # print("car_position :", car_position)
     return doors, car_position
 
 """
@@ -133,20 +133,16 @@ def make_choose(doors_situation, user_choice, car_position, swap):
     opened_door = [index for index, value in enumerate(doors_situation) if index != user_choice and index != car_position][0]
     remained_door = [index for index, value in enumerate(doors_situation) if index != user_choice and index != opened_door][0]
 
-    if opened_door == 0:
-        print(door_graph.FIRST_GOAT)
-    elif opened_door == 1:
-        print(door_graph.SECOND_GOAT)
+    if user_choice == 0:
+        print("choose : [ O, X, X ]")
+    elif user_choice == 1:
+        print("choose : [ X, O, X ]")
     else:
-        print(door_graph.THIRD_GOAT)
-    print("showing one door with goat")
-    print("you choose {}th door".format(user_choice+1))
+        print("choose : [ X, X, O ]")
 
     # offer to change the user's choice
-    while True:
-        want_to_change = random.choice("yn")
-        if want_to_change in ["y", "n"]:
-            break
+    want_to_change = random.choice("yn")
+    print("swap? : ", want_to_change)
 
     if want_to_change == "y":
         swap = 1
@@ -155,8 +151,6 @@ def make_choose(doors_situation, user_choice, car_position, swap):
                 temp = opened_door
                 opened_door = user_choice
                 user_choice = temp
-
-
     else:
         swap = 0
 
@@ -164,19 +158,20 @@ def make_choose(doors_situation, user_choice, car_position, swap):
 
 def result_judge(user_choice, car_position, total_games):
     total_games += 1
-
+    """
     if car_position == 0:
         print(door_graph.FIRST_CAR_OTHERS_GOAT)
     elif car_position == 1:
         print(door_graph.SECOND_CAR_OTHERS_GOAT)
     else:
         print(door_graph.THIRD_CAR_OTHERS_GOAT)
+    """
 
     if user_choice == car_position:
-        print("You win! The car was behind the door!")
+        print("win")
         return 1, total_games
     else:
-        print("You lose! The car was behind the door!")
+        print("lose")
         return 0, total_games
 
 def result_cal(result, swap, swap_win, swap_loss, stay_win, stay_loss, total_games):
@@ -213,7 +208,7 @@ def main():
 
 
     while True:
-        num_repeat = input("How many times do you want to play? :")
+        num_repeat = input("How many times do you want to play? : ")
         if num_repeat.isdigit():
             break
 
