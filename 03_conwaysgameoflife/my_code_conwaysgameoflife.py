@@ -8,7 +8,7 @@ HEIGHT = 90
 WIDTH = 80
 
 ALIVE = "#"
-DEAD = "."
+DEAD = " "
 
 
 def main():
@@ -22,31 +22,52 @@ def main():
 
     # loop
     while True:
+        life_cycle += 1
         for x in range(WIDTH):
             for y in range(HEIGHT):
                 print(cells[(x, y)], end="")
-        print("\n")
+            print("")
 
        # make new cell based on previous cell
+        next_cells = {}
         for x in range(WIDTH):
+
             for y in range(HEIGHT):
+                neighbor_cell = 0
                 ABOVE = (y-1) % HEIGHT
                 BELOW = (y+1) % HEIGHT
                 LEFT = (x-1) % WIDTH
                 RIGHT = (x+1) % WIDTH
 
                 if cells[(x, ABOVE)] == ALIVE:
-                    neighbour_cell += 1
+                    neighbor_cell += 1
+                if cells[(x, BELOW)] == ALIVE:
+                    neighbor_cell += 1
+                if cells[(LEFT, y)] == ALIVE:
+                    neighbor_cell += 1
+                if cells[(RIGHT, y)] == ALIVE:
+                    neighbor_cell += 1
+                if cells[(LEFT, ABOVE)] == ALIVE:
+                    neighbor_cell += 1
+                if cells[(RIGHT, ABOVE)] == ALIVE:
+                    neighbor_cell += 1
+                if cells[(LEFT, BELOW)] == ALIVE:
+                    neighbor_cell += 1
+                if cells[(RIGHT, BELOW)] == ALIVE:
+                    neighbor_cell += 1
 
-
-
-
-
-
+                if cells[(x, y)] == ALIVE and (neighbor_cell == 2 or neighbor_cell == 3):
+                    next_cells[(x, y)] = ALIVE
+                elif cells[(x, y)] == DEAD and neighbor_cell == 3:
+                    next_cells[(x, y)] = ALIVE
+                else:
+                    next_cells[(x, y)] = DEAD
+        cells = next_cells
 
 
         try:
-            time.sleep(1)
+            # time.sleep(1)
+            input("press enter to continue" )
             print("ctrl+c to exit")
             print("\n" * 10)
         except KeyboardInterrupt:
