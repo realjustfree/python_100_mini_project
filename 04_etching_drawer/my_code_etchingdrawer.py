@@ -12,13 +12,46 @@ class lines:
     DOWN_LEFT_RIGHT_CHAR = chr(9516)  # Character 9516 is '┬'
     UP_LEFT_RIGHT_CHAR = chr(9524)  # Character 9524 is '┴'
     CROSS_CHAR = chr(9532)  # Character 9532 is '┼'
-    CANVAS_WIDTH, CANVAS_HEIGHT = shutil.get_terminal_size()
+    # CANVAS_WIDTH, CANVAS_HEIGHT = shutil.get_terminal_size()
+    CANVAS_WIDTH, CANVAS_HEIGHT = 3, 2
 
+def draw_canvas(canvas, cx, cy):
+    canvaString = ""
 
+    for rowNum in range(lines.CANVAS_HEIGHT):
+        for colNum in range(lines.CANVAS_WIDTH):
+            if rowNum == cy and colNum == cx:
+                canvaString += '#'
+                continue
 
+            cell = canvas.get((colNum, rowNum))
+            if cell in [set(['w','s']), set(['w']), set(['s'])]:
+                canvaString += lines.UP_DOWN_CHAR
+            elif cell in [set(['a','d']), set(['a']), set(['d'])]:
+                canvaString += lines.LEFT_RIGHT_CHAR
+            elif cell == set(['s', 'd']):
+                canvaString += lines.DOWN_RIGHT_CHAR
+            elif cell == set(['a', 's']):
+                canvaString += lines.DOWN_LEFT_CHAR
+            elif cell == set(['w', 'd']):
+                canvaString += lines.UP_RIGHT_CHAR
+            elif cell == set(['w', 'a']):
+                canvaString += lines.UP_LEFT_CHAR
+            elif cell == set(['w', 's', 'd']):
+                canvaString += lines.UP_DOWN_RIGHT_CHAR
+            elif cell == set(['w', 's', 'a']):
+                canvaString += lines.UP_DOWN_LEFT_CHAR
+            elif cell == set(['a', 's', 'd']):
+                canvaString += lines.DOWN_LEFT_RIGHT_CHAR
+            elif cell == set(['w', 'a', 'd']):
+                canvaString += lines.UP_LEFT_RIGHT_CHAR
+            elif cell == set(['w', 'a', 's', 'd']):
+                canvaString += lines.CROSS_CHAR
+            elif cell == None:
+                canvaString += ' '
+        canvaString += '\n'
 
-def draw_canvas():
-    pass
+    print(canvaString)
 
 def main():
     canvas = {}
@@ -28,20 +61,55 @@ def main():
 
     while True:
 
-        print("Input WASD keys to draw lines, C to clear, F to save or Q to quit.")
-        respond = input("> ").lower()
+        draw_canvas(canvas, cursor_x, cursor_y)
 
+        print("Input WASD keys to draw lines, C to clear, F to save or Q to quit.")
+        #respond = input("> ").lower()
+        respond = "ddsaaw"
         if respond == 'q' or respond == 'quit':
             print("Goodbye!")
             sys.exit()
 
         for command in respond:
             if command not in ('w', 'a', 's', 'd'):
-                print("Invalid command. Please input WASD keys to draw lines")
                 continue
             moves.append(command)
 
+            # draw first when canvas in empty
+            if canvas == {}:
+                if command in ('w', 's'):
+                    canvas[(cursor_x, cursor_y)] = set(['w','s'])
+                elif command in ('a', 'd'):
+                    canvas[(cursor_x, cursor_y)] = set(['a', 'd'])
 
+            if command == 'w' and cursor_y > 0:
+                canvas[(cursor_x, cursor_y)].add(command)
+                cursor_y = cursor_y - 1
+            elif command == 's' and cursor_y < lines.CANVAS_HEIGHT:
+                canvas[(cursor_x, cursor_y)].add(command)
+                cursor_y = cursor_y + 1
+            elif command == 'a' and cursor_x > 0:
+                canvas[(cursor_x, cursor_y)].add(command)
+                cursor_x = cursor_x - 1
+            elif command == 'd' and cursor_x < lines.CANVAS_WIDTH:
+                canvas[(cursor_x, cursor_y)].add(command)
+                cursor_x = cursor_x + 1
+            else:
+                continue
+
+            # make empty set if cursor is not in canvas
+            if (cursor_x, cursor_y) not in canvas:
+                canvas[(cursor_x, cursor_y)] = set()
+
+            # add direction to the set
+            if command == 'w':
+                canvas[(cursor_x, cursor_y)].add('s')
+            elif command == 's':
+                canvas[(cursor_x, cursor_y)].add('w')
+            elif command == 'a':
+                canvas[(cursor_x, cursor_y)].add('d')
+            elif command == 'd':
+                canvas[(cursor_x, cursor_y)].add('a')
 
 
 
